@@ -25,15 +25,21 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-        shell: bash
+
+      - name: Run packer script file
+          run: |
+            pwd
+            mv target/*.jar ./webservice.jar
+
+          shell: bash
       - name: Initialize Packer Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: init
-          target: ./scripts/
+          uses: hashicorp/packer-github-actions@master
+          with:
+            command: init
+            target: ./scripts/
       - name: Validate Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          #arguments: -syntax-only
-          target: ./scripts/ami.pkr.hcl
+          uses: hashicorp/packer-github-actions@master
+          with:
+            command: validate
+            #arguments: -syntax-only
+            target: ./scripts/ami.pkr.hcl
