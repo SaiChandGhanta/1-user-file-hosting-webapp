@@ -28,10 +28,10 @@ jobs:
 
       - name: Run packer script file
         run: |
-             pwd
-             mkdir staging && mv target/*.jar ./webservice.jar
-             ls -ltr
-          
+            pwd
+            mkdir staging && mv target/*.jar ./webservice.jar
+            ls -ltr
+
         shell: bash
       - name: Initialize Packer Template
         uses: hashicorp/packer-github-actions@master
