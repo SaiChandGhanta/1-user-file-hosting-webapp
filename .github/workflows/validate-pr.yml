@@ -27,8 +27,11 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Run packer script file
-        run: mv target/*.jar ./webservice.jar
-
+        run: |
+             pwd
+             mkdir staging && mv target/*.jar ./webservice.jar
+             ls -ltr
+        shell: bash
       - name: Initialize Packer Template
         uses: hashicorp/packer-github-actions@master
         with:
@@ -39,3 +42,4 @@ jobs:
         with:
           command: validate
           target: ./scripts/ami.pkr.hcl
+        shell: bash
