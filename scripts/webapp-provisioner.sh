@@ -9,6 +9,21 @@ java --version
 
 #postgresql13-server
 sudo apt-get install postgresql-14 -y
+
+#sudo /usr/pgsql-13/bin/postgresql-13-setup initdb
+#sudo systemctl enable --now postgresql-13
+#systemctl status postgresql-13
+sudo psql --version
+#sudo -i -u postgres
+#psql
+#ALTER USER postgres PASSWORD 'postgres';
+#sudo systemctl restart postgresql-13
+#check the ports availability
+#sudo lsof -PiTCP -sTCP:LISTEN
+#sudo -u postgres psql -U postgres -c "CREATE ROLE bipin SUPERUSER CREATEDB CREATEROLE LOGIN PASSWORD 'bipin';"
+#sudo systemctl restart postgresql-13
+#sleep 10
+
 sudo psql --version
 sudo -i -u postgres
 psql
