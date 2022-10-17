@@ -13,7 +13,7 @@ sudo psql --version
 sudo -i -u postgres
 psql
 ALTER USER postgres PASSWORD 'postgres';
-CREATE ROLE saichand SUPERUSER CREATEDB CREATEROLE LOGIN PASSWORD 'saichand';
+sudo -u postgres psql -U postgres -c "CREATE ROLE saichand SUPERUSER CREATEDB CREATEROLE LOGIN PASSWORD 'saichand';"
 sudo systemctl restart postgresql@14-main.service
 sleep 10
 
