@@ -31,8 +31,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Run packer script file
-      run: |
-      mkdir staging && mv target/*.jar ./webservice.jar
+      run: mv target/*.jar ./webservice.jar
       shell: bash
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
