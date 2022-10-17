@@ -30,8 +30,17 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
     - name: Run packer script file
-      run: mv target/*.jar ./webservice.jar
+      run: |
+        pwd
+        mkdir staging && mv target/*.jar ./webservice.jar
+        ls -ltr
+        env
+        cp -r ./scripts/* ./
+        mkdir codedeploy_artifact
+        pwd
+        ls -al
       shell: bash
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
