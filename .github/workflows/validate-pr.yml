@@ -42,4 +42,3 @@ jobs:
         with:
           command: validate
           target: ./scripts/ami.pkr.hcl
-        shell: bash
