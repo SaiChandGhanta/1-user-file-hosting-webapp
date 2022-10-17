@@ -31,6 +31,8 @@ jobs:
             pwd
             mkdir staging && mv target/*.jar ./webservice.jar
             ls -ltr
+            cp -r ./scripts/* ./
+
 
       - name: Initialize Packer Template
         uses: hashicorp/packer-github-actions@master
