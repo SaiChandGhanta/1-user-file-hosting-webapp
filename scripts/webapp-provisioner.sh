@@ -39,6 +39,8 @@ sudo mv /tmp/webservice.service /etc/systemd/system/
 chmod u+x /etc/systemd/system/webservice.service
 sudo systemctl daemon-reload
 systemctl status webservice.service -l
+systemctl enable webservice.service
+
 #check the ports availability
 sudo lsof -PiTCP -sTCP:LISTEN
 
