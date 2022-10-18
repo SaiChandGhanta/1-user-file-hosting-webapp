@@ -5,18 +5,8 @@ After=syslog.target network.target
 [Service]
 User=ubuntu
 WorkingDirectory=/home/ubuntu/workspace
-#path to the executable bash script which executes the jar file
-#ExecStart=nohup java -jar -Dserver.port=8083  \
-#-Dspring.jpa.hibernate.ddl-auto=create \
-#webservice.jar > log-$(date +%Y%m%d_%H%M%S).log 2>&1 &
-#          -Dspring.datasource.url=jdbc:postgresql://localhost:5432/postgres  \
-#          -Dspring.datasource.username=saichand \
-#          -Dspring.datasource.password='saichand' \
-#/bin/bash /home/ec2-user/workspace/your-script.sh
 
 ExecStart=/bin/bash -c 'java -jar webservice.jar'
-# -Dspring.jpa.hibernate.ddl-auto=create \
-# -Dserver.port=8083 \
 
 Type=simple
 SuccessExitStatus=143
