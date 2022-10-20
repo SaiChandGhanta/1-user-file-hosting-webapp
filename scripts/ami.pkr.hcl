@@ -55,9 +55,7 @@ source "amazon-ebs" "webapp_ami" {
   associate_public_ip_address= true
   ssh_interface = "public_ip"
   ami_users    = "${var.aws_accounts}"
-  #vpc_id       = "{{user `vpc_id`}}",
-  #ssh_keypair_name = "chandu-dev-test"
-  #ssh_private_key_file = "~/chandu-dev-test"
+
   tags = {
     Name ="chandu_webapp_${local.timestamp}"
     OS_Version = "Amazon Ubuntu"
@@ -85,7 +83,5 @@ build {
   provisioner "shell" {
     script = "webapp-provisioner.sh"
   }
-#  provisioner "shell" {
-#    inline = ["chmod u+x /tmp/webapp-provisioner.sh", "/tmp/webapp-provisioner.sh"]
-#  }
+
 }
