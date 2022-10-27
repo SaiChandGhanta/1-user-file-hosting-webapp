@@ -54,3 +54,4 @@ jobs:
           chmod +x ./scripts/create-ami.sh
           ./scripts/create-ami.sh
         shell: bash
+

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Document;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import com.example.demo.util.exception.CustomErrorException;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -92,6 +94,60 @@ public class AuthenticationController {
         if (!user.getUsername().equals(userName))
             throw new CustomErrorException("Trying to access other user", HttpStatus.FORBIDDEN);
         return ResponseEntity.ok(userService.getUser(userName));
+    }
+
+    @PostMapping(value = "/documents",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Document> addOrUpdateUserProfileImage(@RequestParam("file") MultipartFile file) throws Exception{
+        String userName = ((UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUsername();
+        Document document = userService.saveUserDoc(userName, file);
+        return ResponseEntity.ok(document);
+    }
+
+
+    @GetMapping(value = "/documents")
+    public ResponseEntity <List<Document>> getUserDoc() {
+        String userName = ((UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUsername();
+
+        return ResponseEntity.ok(userService.getUserDocuments(userName));
+    }
+
+    @GetMapping(value= "/documents/{id}")
+    public Document getDoc(@PathVariable UUID id) {
+        String userName = ((UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUsername();
+
+
+        User user = userService.getUser(userName);
+        Document document =  userService.getDocuments(id);
+//                .orElseThrow(() ->
+//                        new CustomErrorException("Cannot find given user", HttpStatus.BAD_REQUEST));
+
+        if (!user.getId().equals(document.getUser_id()))
+            throw new CustomErrorException("Trying to access other user documents", HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.ok(userService.getDocuments(id)).getBody();
+    }
+
+    @DeleteMapping(value = "/documents/{id}")
+    public ResponseEntity deletedocument(@PathVariable UUID id) {
+        String userName = ((UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUsername();
+
+        User user = userService.getUser(userName);
+        Document document =  userService.getDocuments(id);
+//                .orElseThrow(() ->
+//                        new CustomErrorException("Cannot find given user", HttpStatus.BAD_REQUEST));
+
+        if (!user.getId().equals(document.getUser_id()))
+            throw new CustomErrorException("Trying to access other user documents", HttpStatus.FORBIDDEN);
+
+
+        userService.deleteUserDocument(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
