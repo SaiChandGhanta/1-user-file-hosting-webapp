@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
+import com.amazonaws.SdkBaseException;
+import com.example.demo.model.Document;
 import com.example.demo.model.User;
+import com.example.demo.repository.DocumentRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.exception.CustomErrorException;
 import org.slf4j.Logger;
@@ -24,11 +27,20 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserService implements UserDetailsService {
+    Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private DocumentRepository documentRepository;
+
+    @Autowired
+    @Lazy
+    private AWSS3ClientService awss3ClientService;
 
     public User saveUser(User user) throws Exception {
         if (user.getUsername() == null || user.getUsername().isBlank())
@@ -107,5 +119,65 @@ public class UserService implements UserDetailsService {
         return Pattern.compile(regex)
                 .matcher(mail)
                 .matches();
+    }
+
+    public Document saveUserDoc(String userName, MultipartFile file) throws Exception{
+        if (file.isEmpty()) {
+            throw new CustomErrorException("Cannot upload empty file",HttpStatus.BAD_REQUEST);
+        }
+
+
+        User user = getUser(userName);
+        List <Document> documents = documentRepository.findAllByUserId(user.getId());
+        for(Document document : documents){
+            if(document.getName().equals(file.getOriginalFilename()))
+            {
+                try{
+                    awss3ClientService.deleteFileFromS3Bucket(document.getS3_bucket_path());
+                }catch (SdkBaseException se) {
+                    logger.warn("Failed to delete old file : "+ document.getS3_bucket_path(), se.toString());
+                    //throw new CustomErrorException("Unable to delete profile image from s3", HttpStatus.INTERNAL_SERVER_ERROR);
+                    se.printStackTrace();
+                }
+                documentRepository.deleteById(document.getDoc_id());
+            }
+        }
+
+        String fileUrl="";
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("Content-Type", file.getContentType());
+        metadata.put("Content-Length", String.valueOf(file.getSize()));
+        try{
+            fileUrl = awss3ClientService.uploadFile(file.getInputStream(), user.getId().toString(), Optional.of(metadata), file.getOriginalFilename());
+        }catch (SdkBaseException e){
+            throw new CustomErrorException("Failed to upload to s3",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        Document i = new Document(file.getOriginalFilename(), fileUrl, new Date(),user.getId());
+
+        return documentRepository.save(i);
+    }
+
+    public List<Document> getUserDocuments(String userName) {
+        List<Document> documents = documentRepository.findAllByUserId(getUser(userName).getId());
+        if(documents == null || documents.isEmpty()) throw new CustomErrorException("User does not have any document", HttpStatus.NOT_FOUND);
+        return  documents;
+    }
+
+
+    public Document getDocuments(UUID id) {
+        Document document = documentRepository.findUserById(id);
+        if(document == null ) throw new CustomErrorException("Does not have any document", HttpStatus.NOT_FOUND);
+        return  document;
+    }
+
+    public void deleteUserDocument(UUID id) {
+        Document document = documentRepository.findUserById(id);
+        if(document == null) throw new CustomErrorException("User does not have any documents", HttpStatus.NOT_FOUND);
+        try {
+            awss3ClientService.deleteFileFromS3Bucket(document.getS3_bucket_path());
+        } catch (SdkBaseException se) {
+            throw new CustomErrorException("Unable to delete User document", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        documentRepository.delete(document);
     }
 }

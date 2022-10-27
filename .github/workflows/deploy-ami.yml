@@ -54,3 +54,15 @@ jobs:
           chmod +x ./scripts/create-ami.sh
           ./scripts/create-ami.sh
         shell: bash
+
+          - name: Initialize Packer Template
+            uses: hashicorp/packer-github-actions@master
+            with:
+              command: init
+              target: ./scripts/
+          - name: Validate Template
+            uses: hashicorp/packer-github-actions@master
+            with:
+              command: validate
+              #arguments: -syntax-only
+              target: ./scripts/ami.pkr.hcl
