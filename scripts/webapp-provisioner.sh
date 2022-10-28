@@ -7,8 +7,8 @@ sudo apt-get update -y
 sudo apt-get install openjdk-17-jdk -y
 java --version
 
-#postgresql14-server
-sudo apt-get install postgresql-14 -y
+#postgresql14-client
+sudo apt-get install -y postgresql-client
 
 cd ~ || exit
 
