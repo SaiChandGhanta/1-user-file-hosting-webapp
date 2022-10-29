@@ -8,6 +8,7 @@
 - Maven
 - Java17
 - Postman
+- -AWS
 
 ### Deployment Instructions
 test
