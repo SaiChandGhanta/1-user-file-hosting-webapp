@@ -29,8 +29,6 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
     -m ec2 \
     -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json \
     -s
-sudo cp /tmp/cloudwatch_config.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
-
 sudo systemctl enable amazon-cloudwatch-agent.service
 sudo systemctl start amazon-cloudwatch-agent.service
 systemctl status amazon-cloudwatch-agent.service -l

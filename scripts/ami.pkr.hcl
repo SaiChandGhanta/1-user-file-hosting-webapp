@@ -77,6 +77,10 @@ build {
     destination = "~/workspace/webservice.jar"
   }
   provisioner "file" {
+    source = "cloudwatch_config.json"
+    destination = "/tmp/cloudwatch_config.json"
+  }
+  provisioner "file" {
     source = "webservice.service"
     destination = "/tmp/webservice.service"
   }
