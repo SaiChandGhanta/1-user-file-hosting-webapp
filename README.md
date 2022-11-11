@@ -8,6 +8,7 @@
 - Maven
 - Java17
 - Postman
+- StatsD
 
 ### Deployment Instructions
 test
