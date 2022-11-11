@@ -12,7 +12,7 @@
 
 ### Deployment Instructions
 test
-* Change following branch settings in organization to enable branch protection
+* Change following branch settings in organization to enable branch protections
 	- Add Branch name pattern
 	- enable Require status checks to pass before merging
 	- Require branches to be up to date before merging
