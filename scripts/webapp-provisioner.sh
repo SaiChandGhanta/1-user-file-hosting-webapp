@@ -19,6 +19,21 @@ sudo systemctl daemon-reload
 systemctl status webservice.service -l
 sudo systemctl enable webservice.service
 
+#cloudwatch agent setup
+wget download-link https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+sudo cp /tmp/cloudwatch_config.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+#recommended config location as per docs
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -a fetch-config \
+    -m ec2 \
+    -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json \
+    -s
+sudo cp /tmp/cloudwatch_config.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+
+sudo systemctl enable amazon-cloudwatch-agent.service
+sudo systemctl start amazon-cloudwatch-agent.service
+systemctl status amazon-cloudwatch-agent.service -l
 
 
 
