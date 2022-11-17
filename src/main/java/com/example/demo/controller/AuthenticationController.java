@@ -37,6 +37,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @GetMapping("/users")
     public List<User> getAllusers() {
@@ -147,6 +148,17 @@ public class AuthenticationController {
 
 
         userService.deleteUserDocument(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/verifyUserEmail")
+    public ResponseEntity verifyUserEmail(@RequestParam(name = "email") String mail,
+                                          @RequestParam String token) throws Exception{
+        if(mail.contains(" ")){
+            logger.warn("mail : " + mail + " got encoded by a whitespace character. Changing it back");
+            mail = mail.replace(" ","+");
+        }
+        userService.verifyUser(mail, token);
         return ResponseEntity.noContent().build();
     }
 

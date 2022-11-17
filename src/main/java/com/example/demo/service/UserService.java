@@ -5,6 +5,7 @@ import com.example.demo.model.Document;
 import com.example.demo.model.User;
 import com.example.demo.repository.DocumentRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.second.model.UserToken;
 import com.example.demo.util.exception.CustomErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
-import java.io.InputStream;
+import java.sql.PseudoColumnUsage;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import static org.apache.http.entity.ContentType.IMAGE_JPEG;
+import static org.apache.http.entity.ContentType.IMAGE_PNG;
 
 
 @Service
@@ -42,6 +46,13 @@ public class UserService implements UserDetailsService {
     @Lazy
     private AWSS3ClientService awss3ClientService;
 
+    @Autowired
+    @Lazy
+    private AWSSnsClientService awsSnsClientService;
+
+    @Autowired
+    private UserTokenService userTokenService;
+
     public User saveUser(User user) throws Exception {
         if (user.getUsername() == null || user.getUsername().isBlank())
             throw new CustomErrorException("UserName must be set", HttpStatus.BAD_REQUEST);
@@ -54,11 +65,16 @@ public class UserService implements UserDetailsService {
         user.setAccount_created(new Date());
         user.setAccount_updated(new Date());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        UserToken userToken = userTokenService.saveUserToken(user.getUsername());
+        logger.info(userToken.toString());
+        awsSnsClientService.publishSNSMessage(user.getUsername()+":"+userToken.getToken());
         return userRepository.save(user);
     }
 
     public User updateUser(User user) throws Exception {
         User prevUser = userRepository.findByUsername(user.getUsername());
+        checkIfVerified(prevUser);
         if (user.getAccount_updated() != null ||
                 user.getAccount_created() != null ||
                 user.getId() != null
@@ -94,6 +110,19 @@ public class UserService implements UserDetailsService {
     public User getUser(String userName) {
         return userRepository.findByUsername(userName);
     }
+    public boolean verifyUser(String userName, String token) throws Exception{
+        logger.info("VerifyUserCalled by "+userName + " with token : "+ token);
+        User user = userRepository.findByUsername(userName);
+        if(user == null) throw new CustomErrorException("No such user exists", HttpStatus.BAD_REQUEST);
+        if(user.isVerified()) throw new CustomErrorException("Already verified. Link no longer valid", HttpStatus.BAD_REQUEST);
+        boolean isVerified = userTokenService.verifyUser(userName,token);
+        user.setVerified(isVerified);
+        user.setAccount_updated(new Date());
+        userRepository.save(user);
+        if(!isVerified) throw new CustomErrorException("Token expired. Contact admin for reset", HttpStatus.BAD_REQUEST);
+        return isVerified;
+    }
+
 
     public Optional<User> getByUserId(String uuid) {
         return userRepository.findById(UUID.fromString(uuid));
@@ -156,7 +185,15 @@ public class UserService implements UserDetailsService {
 
         return documentRepository.save(i);
     }
-
+    public User passUserToEndpoint(String userName){
+        User user = getUser(userName);
+        checkIfVerified(user);
+        return user;
+    }
+    public boolean checkIfVerified(User user){
+        if(!user.isVerified()) throw new CustomErrorException("User not verified yet", HttpStatus.BAD_REQUEST);
+        return true;
+    }
     public List<Document> getUserDocuments(String userName) {
         List<Document> documents = documentRepository.findAllByUserId(getUser(userName).getId());
         if(documents == null || documents.isEmpty()) throw new CustomErrorException("User does not have any document", HttpStatus.NOT_FOUND);
@@ -180,4 +217,5 @@ public class UserService implements UserDetailsService {
         }
         documentRepository.delete(document);
     }
+
 }
