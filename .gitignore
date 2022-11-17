@@ -57,6 +57,6 @@ build/
 .vscode/
 maven-wrapper.jar
 
-log
+logs
 
 .DS_store
