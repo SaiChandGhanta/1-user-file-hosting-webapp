@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-
+logs/
 # Log file
 *.log
 
@@ -57,6 +57,6 @@ build/
 .vscode/
 maven-wrapper.jar
 
-logs/
+
 
 .DS_store
