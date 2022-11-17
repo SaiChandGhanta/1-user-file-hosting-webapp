@@ -107,6 +107,11 @@
             <classifier>osx-aarch_64</classifier>
         </dependency>
         <dependency>
+            <groupId>com.github.derjust</groupId>
+            <artifactId>spring-data-dynamodb</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -137,6 +142,7 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-sns</artifactId>
@@ -151,6 +157,7 @@
             <version>5.1.0</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -178,4 +185,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
