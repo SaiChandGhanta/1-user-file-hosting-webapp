@@ -56,7 +56,6 @@ public class AuthenticationController {
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpStatus.UNAUTHORIZED, user);
         }
-
     }
 
     @PutMapping(value = "/account/{id}")
