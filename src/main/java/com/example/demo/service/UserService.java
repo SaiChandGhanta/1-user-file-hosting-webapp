@@ -157,6 +157,8 @@ public class UserService implements UserDetailsService {
 
 
         User user = getUser(userName);
+        checkIfVerified(user);
+
         List <Document> documents = documentRepository.findAllByUserId(user.getId());
         for(Document document : documents){
             if(document.getName().equals(file.getOriginalFilename()))
@@ -195,6 +197,8 @@ public class UserService implements UserDetailsService {
         return true;
     }
     public List<Document> getUserDocuments(String userName) {
+        User user = getUser(userName);
+        checkIfVerified(user);
         List<Document> documents = documentRepository.findAllByUserId(getUser(userName).getId());
         if(documents == null || documents.isEmpty()) throw new CustomErrorException("User does not have any document", HttpStatus.NOT_FOUND);
         return  documents;

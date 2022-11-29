@@ -62,6 +62,7 @@ public class AuthenticationController {
     @PutMapping(value = "/account/{id}")
 
     public ResponseEntity updateUserInfo(@RequestBody Map<String, Object> body, @PathVariable String id) throws Exception {
+
         String userName = ((UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getUsername();
         User userById = userService.getByUserId(id)
@@ -123,6 +124,8 @@ public class AuthenticationController {
 
 
         User user = userService.getUser(userName);
+        userService.checkIfVerified(user);
+
         Document document =  userService.getDocuments(id);
 //                .orElseThrow(() ->
 //                        new CustomErrorException("Cannot find given user", HttpStatus.BAD_REQUEST));
@@ -139,6 +142,8 @@ public class AuthenticationController {
                 .getAuthentication().getPrincipal()).getUsername();
 
         User user = userService.getUser(userName);
+        userService.checkIfVerified(user);
+
         Document document =  userService.getDocuments(id);
 //                .orElseThrow(() ->
 //                        new CustomErrorException("Cannot find given user", HttpStatus.BAD_REQUEST));
