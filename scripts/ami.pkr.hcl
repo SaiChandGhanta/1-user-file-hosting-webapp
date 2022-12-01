@@ -28,6 +28,11 @@ variable "subnet_id" {
   default = ""
 }
 
+variable "GITHUB_REF" {
+  type    = string
+  default = ""
+}
+
 variable "aws_accounts" {
   type    = list(string)
   default = ["675945825324","562996519735"]
@@ -36,7 +41,7 @@ variable "aws_accounts" {
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 source "amazon-ebs" "webapp_ami" {
   ami_description = "AmazonUbuntu AMI for CSYE 6225 Fall 2022-webApp"
-  ami_name        = "webapp_${local.timestamp}"
+  ami_name        = "csye6225_${var.GITHUB_REF}"
   instance_type   = "t2.micro"
   launch_block_device_mappings {
     device_name           = "/dev/sda1"
@@ -87,5 +92,4 @@ build {
   provisioner "shell" {
     script = "webapp-provisioner.sh"
   }
-
 }
