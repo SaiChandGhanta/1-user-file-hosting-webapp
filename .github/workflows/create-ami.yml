@@ -71,8 +71,8 @@ jobs:
           fi
 
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEMO_USER_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEMO_USER_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
 
       # update autoscaling group
@@ -88,20 +88,20 @@ jobs:
           fi
 
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEMO_USER_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEMO_USER_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
 
       # update autoscaling group
       - name: refresh autoscaling instances
         run: |
-          ASG=$(aws autoscaling describe-auto-scaling-instances --query 'AutoScalingInstances[?AutoScalingGroupName==`ec2-auto-scaling-group`].InstanceId' --output text)
+          ASG=$(aws autoscaling describe-auto-scaling-instances --query 'AutoScalingInstances[?AutoScalingGroupName==`myvpcec2-auto-scaling-group`].InstanceId' --output text)
           if [ "$ASG" != "" ]
           then
           echo Autoscaling group exists
           REFRESH_INSTANCE_ID=$(aws autoscaling start-instance-refresh --auto-scaling-group-name myvpcec2-auto-scaling-group --output text) 
           echo $REFRESH_INSTANCE_ID
-          STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name ec2-auto-scaling-group --instance-refresh-ids $REFRESH_INSTANCE_ID --query 'InstanceRefreshes[0].Status' --output text)
+          STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name myvpcec2-auto-scaling-group --instance-refresh-ids $REFRESH_INSTANCE_ID --query 'InstanceRefreshes[0].Status' --output text)
           count=1
           while [ "$STATUS" != "Successful" ]
             do
@@ -113,6 +113,14 @@ jobs:
               echo "unable to update instance"
               exit 1
             fi
-            STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name ec2-auto-scaling-group --instance-refresh-ids $REFRESH_INSTANCE_ID --query 'InstanceRefreshes[0].Status' --output text)
+            STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name myvpcec2-auto-scaling-group --instance-refresh-ids $REFRESH_INSTANCE_ID --query 'InstanceRefreshes[0].Status' --output text)
             done
+            echo $STATUS
+            else
+             echo Autoscaling does not exist
+            fi
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEMO_USER_ACCESS_KEY }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEMO_USER_SECRET_ACCESS_KEY }}
+            AWS_DEFAULT_REGION: 'us-east-1'
 
