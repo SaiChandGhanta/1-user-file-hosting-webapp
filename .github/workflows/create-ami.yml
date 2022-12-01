@@ -47,11 +47,20 @@ jobs:
           # if you have/need it
           aws-region: ${{env.AWS_REGION}}
 
-      - name: Run packer script file
-        run: |
-          ls -ltr
-          pwd
-          chmod +x ./scripts/create-ami.sh
-          ./scripts/create-ami.sh
-        shell: bash
+      # build artifact
+      - name: Build Artifact
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: build
+          arguments: -var=aws_access_key=${{ secrets.AWS_ACCESS_KEY_DEV }} -var=aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }} -var=GITHUB_REF=${{ github.event.pull_request.number }} -color=false -on-error=abort
+          target: ami.pkr.hcl
+          working_directory: "."
+
+#      - name: Run packer script file
+#        run: |
+#          ls -ltr
+#          pwd
+#          chmod +x ./scripts/create-ami.sh
+#          ./scripts/create-ami.sh
+#        shell: bash
 
