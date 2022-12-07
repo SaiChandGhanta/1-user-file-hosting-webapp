@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 
-    @GetMapping("/healthV2")
+    @GetMapping("/healthASGEndpoint")
     @ResponseStatus( HttpStatus.OK )
     public String getHealthz() {
         return "Hello from healthV2 endpoint";
