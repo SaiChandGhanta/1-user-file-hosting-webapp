@@ -55,7 +55,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
 
-                .antMatchers(HttpMethod.GET, "/healthV2", "/v1/account/*"
+                .antMatchers(HttpMethod.GET, "/healthASGEndpoint", "/v1/account/*"
                 )
                 .permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
