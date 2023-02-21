@@ -41,7 +41,7 @@ variable "aws_accounts" {
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 source "amazon-ebs" "webapp_ami" {
   ami_description = "AmazonUbuntu AMI for CSYE 6225 Fall 2022-webApp"
-  ami_name        = "csye6225_${var.GITHUB_REF}"
+  ami_name        = "userFiles_${var.GITHUB_REF}"
   instance_type   = "t2.micro"
   launch_block_device_mappings {
     device_name           = "/dev/sda1"

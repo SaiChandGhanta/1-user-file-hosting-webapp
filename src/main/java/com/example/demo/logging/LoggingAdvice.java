@@ -62,12 +62,12 @@ public class LoggingAdvice {
         Object obj = pjp.proceed();
         long end = System.currentTimeMillis();
         logger.info(pjp.getSignature() + " took : " + (end - start) + "ms");
-        metricRegistry.getInstance().timer("csye6225.endpoint.http.time." + pjp.getSignature().getName()).record(end - start, TimeUnit.MILLISECONDS);
+        metricRegistry.getInstance().timer("userFiles.endpoint.http.time." + pjp.getSignature().getName()).record(end - start, TimeUnit.MILLISECONDS);
         return obj;
     }
 
     @Before(value = "execution(public * com.example.demo.controller.*.*(..)))")
     public void before(JoinPoint joinPoint) {
-        metricRegistry.getInstance().counter("csye6225.endpoint.http." + joinPoint.getSignature().getName()).increment();
+        metricRegistry.getInstance().counter("userFiles.endpoint.http." + joinPoint.getSignature().getName()).increment();
     }
 }

@@ -19,12 +19,12 @@ import org.springframework.http.HttpStatus;
 import javax.annotation.PostConstruct;
 
 @Configuration
-//basePackages = "edu.neu.csye6225.webservice.second.repository.UserTokenRepository"
+//basePackages = "edu.neu.userFiles.webservice.second.repository.UserTokenRepository"
 //basePackageClasses = UserTokenRepository.class
 //type = FilterType.ANNOTATION,
 //includeFilters = {@ComponentScan.Filter( classes = UserTokenRepository.class)}
 @EnableDynamoDBRepositories
-        (basePackages = "edu.neu.csye6225.webservice.second.repository",
+        (basePackages = "edu.neu.userFiles.webservice.second.repository",
                 basePackageClasses = UserTokenRepository.class,
                 includeFilters = {
                         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {UserTokenRepository.class})

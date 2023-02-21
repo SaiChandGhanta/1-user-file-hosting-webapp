@@ -4,7 +4,7 @@
 name: validate-pr
 
 env:
-  ARTIFACT_NAME: csye6225-webapp-${{github.sha}}.zip
+  ARTIFACT_NAME: userFiles-webapp-${{github.sha}}.zip
 
 on:
   pull_request:

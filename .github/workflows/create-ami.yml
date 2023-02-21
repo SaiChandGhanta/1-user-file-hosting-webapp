@@ -4,9 +4,9 @@
 name: create-ami
 
 env:
-  ARTIFACT_NAME: csye6225-webapp-${{github.sha}}.zip
-  CODEDEPLOY_APPLICATION_NAME: csye6225-webapp
-  CODEDEPLOY_APPLICATION_GROUP_NAME: csye6225-webapp-deployment
+  ARTIFACT_NAME: userFiles-webapp-${{github.sha}}.zip
+  CODEDEPLOY_APPLICATION_NAME: userFiles-webapp
+  CODEDEPLOY_APPLICATION_GROUP_NAME: userFiles-webapp-deployment
   AWS_REGION: us-east-1
 
 on:
@@ -64,7 +64,7 @@ jobs:
           if [ "$ASG" != "" ]
           then
           echo Autoscaling group exists
-          AMS_ID=$(aws ec2 describe-images --filters Name=name,Values=csye6225_${{ github.event.pull_request.number }} --query 'Images[0].[ImageId]' --output text)
+          AMS_ID=$(aws ec2 describe-images --filters Name=name,Values=userFiles_${{ github.event.pull_request.number }} --query 'Images[0].[ImageId]' --output text)
           aws ec2 create-launch-template-version --launch-template-name "asg_launch_config" --source-version 1 --launch-template-data ImageId=$AMS_ID
           else
           echo Autoscaling does not exist

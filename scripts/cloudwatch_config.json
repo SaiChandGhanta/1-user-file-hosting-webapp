@@ -9,7 +9,7 @@
         "collect_list": [
           {
             "file_path": "/home/ubuntu/workspace/logs/*",
-            "log_group_name": "csye6225",
+            "log_group_name": "userFiles",
             "log_stream_name": "webapp"
           }
         ]

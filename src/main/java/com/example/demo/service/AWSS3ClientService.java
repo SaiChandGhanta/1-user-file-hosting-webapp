@@ -117,7 +117,7 @@ public class AWSS3ClientService {
         PutObjectRequest putRequest = new PutObjectRequest(bucketName, fileName, inputStream,objectMetadata );
         List<Tag> tags = new ArrayList<Tag>();
         tags.add(new Tag("created-by", "Webservice-JAVA SDK"));
-        tags.add(new Tag("project", "csye6225-spring2022"));
+        tags.add(new Tag("project", "userFiles-spring2022"));
         putRequest.setTagging(new ObjectTagging(tags));
         s3client.putObject(putRequest);
     }
