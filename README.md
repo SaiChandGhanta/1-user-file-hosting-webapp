@@ -17,9 +17,9 @@ A user file hosting application built using Java Springboot and AWS services. In
 
 # Infrastucture and Serverless repos
 
-**[Click here for Infrastructure repo](https://github.com/ebiskhan123/infrastructure)**
+[Click here for Infrastructure repo](https://github.com/SaiChandGhanta/3-user-file-hosting-infrastructure)
 
-**[Click here for Serverless repo](https://github.com/ebiskhan123/infrastructure)**
+[Click here for Serverless repo](https://github.com/SaiChandGhanta/3-user-file-hosting-serverless)
 
 
 
