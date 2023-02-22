@@ -1,26 +1,26 @@
-# webapp
-# Getting Started
+# Description
+A user file hosting application built using Java Springboot and AWS services. Includes an automated CI/CD pipeline built using githubactions and CodeCeploy. Cloudformation template is used for Infrasture as a code (IAAC)
 
-### Prerequisites for building webapp
+# Architecture
 
-- Spring boot
-- Postgres
-- Maven
-- Java17
-- Postman
-- StatsD
+<br/>
 
-### Deployment Instructions
-test
-* Change following branch settings in organization to enable branch protections
-	- Add Branch name pattern
-	- enable Require status checks to pass before merging
-	- Require branches to be up to date before merging
-	- add action name
-* Then raise a pull request to organization, if all test cases are passed, merge option is enabled. If diabled, try to fix errors and raise PR again
+![image](https://github.com/SaiChandGhanta/1-user-file-hosting-webapp/blob/main/architecture.png)
+<br/>
+
+# CICD Workflow
+
+<br/>
+
+![image](https://github.com/SaiChandGhanta/1-user-file-hosting-webapp/blob/main/CICD.png)
+<br/>
+
+# Infrastucture and Serverless repos
+
+**[Click here for Infrastructure repo](https://github.com/ebiskhan123/infrastructure)**
+
+**[Click here for Serverless repo](https://github.com/ebiskhan123/infrastructure)**
 
 
-## Owner
 
-- Sai Chand Ghanta - ghanta.sa@northeastern.edu - 002958772
 
