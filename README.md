@@ -5,7 +5,7 @@ A user file hosting application built using Java Springboot and AWS services. In
 
 <br/>
 
-![image](https://github.com/SaiChandGhanta/1-user-file-hosting-webapp/blob/main/architecture.png)
+![image](https://github.com/SaiChandGhanta/1-user-file-hosting-webapp/blob/main/user%20files%20hosting.png)
 <br/>
 
 # CICD Workflow
